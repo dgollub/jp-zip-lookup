@@ -1,0 +1,22 @@
+# Temporary files
+tmp
+.bak
+.tmp
+.log
+
+# Rust
+/target
+# NOTE(dkg): we want Cargo.lock since we are not a library but a collection of services/binaries.
+# Cargo.lock
+
+# General
+.DS_Store
+Thumbs.db
+*.code-workspace
+
+# Configuration
+.ssh/
+.config/
+*.tfstate
+*.tfvars
+.env
