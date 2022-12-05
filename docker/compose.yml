@@ -1,0 +1,15 @@
+version: "3"
+services:
+  PostgreSQL:
+    build: .
+    image: postgresql
+    container_name: postgres14-jpzip
+    restart: always
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data/mydata
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=jpzip
+      - POSTGRES_PASSWORD=jpzip
+      - PGDATA=/var/lib/postgresql/data/mydata
