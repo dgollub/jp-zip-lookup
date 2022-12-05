@@ -44,6 +44,9 @@ async fn main() {
         .route("/lookup/zip", get(routes::lookup::zip::get))
         .layer(TraceLayer::new_for_http());
 
+    // add a fallback service for handling routes to unknown paths
+    let app = app.fallback(routes::errors::handler_404);
+
     let listening_address = std::env::var(ENV_SERVICE_LISTEN_ADDRESS)
         .unwrap_or(DEFAULT_SERVICE_LISTEN_ADDRESS.to_string());
     let listening_port =
