@@ -9,10 +9,16 @@ PG_DATA_DIR="${SCRIPTPATH}/pgdata"
 DOCKER_COMPOSE_FILE="${SCRIPTPATH}/compose.yml"
 GROUP=${GROUP}
 SUDO=
-echo "OSTYPE: $OSTYPE"
+
 [ -z $GROUP ] && GROUP=`groups $(whoami) | cut -d' ' -f1`
 [ -z $GROUP ] && GROUP=`id -g`
-[ "$OSTYPE" != "darwin"* ] && SUDO="sudo"
+[ "$OSTYPE" != "darwin"* ] || SUDO="sudo"
+
+cleanup() {
+    err=$?
+    exit $err
+}
+trap cleanup INT ERR TERM
 
 echofig() {
   WIDTH=`tput cols`; [ $? -eq 0 ] || WIDTH=120

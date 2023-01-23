@@ -3,6 +3,7 @@ services:
   PostgreSQL:
     build: .
     image: postgresql
+    command: [ "postgres", "-c", "stats_temp_directory=/tmp" ]
     container_name: postgres14-jpzip
     restart: always
     volumes:
