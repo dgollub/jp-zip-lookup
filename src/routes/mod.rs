@@ -1,4 +1,5 @@
 pub mod errors;
 pub mod healthcheck;
 pub mod index;
-pub mod lookup;
+pub mod postcodes;
+pub mod prefectures;

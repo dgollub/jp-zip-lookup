@@ -42,5 +42,10 @@ docker-compose -f "${DOCKER_COMPOSE_FILE}" stop
 docker-compose -f "${DOCKER_COMPOSE_FILE}" up -d --build || abort "Failed to build or start the Docker container."
 
 echo "Done: Docker PostgreSQL container will be up and running shortly. It usually takes a couple of seconds."
+echo "Waiting for container to start up ..."
+echo ""
+sleep 30 > /dev/null
 echo "Use 'docker logs -f postgres14-jpzip' to see the logs of the database."
 echo "Use 'PGPASSWORD=jpzip psql --host=localhost --port 5432 --user=jpzip' to connect to the database."
+echo ""
+echo "Done"

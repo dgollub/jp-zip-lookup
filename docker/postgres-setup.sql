@@ -24,4 +24,17 @@ CREATE TABLE IF NOT EXISTS "addresses" (
 
 CREATE INDEX "zip_code_idx" ON "addresses" ("zip_code");
 CREATE INDEX "prefecture_kanji_idx" ON "addresses" ("prefecture_kanji");
+CREATE INDEX "prefecture_kana_idx" ON "addresses" ("prefecture_kana");
+CREATE INDEX "town_kanji_idx" ON "addresses" ("town_kanji");
+CREATE INDEX "town_kana_idx" ON "addresses" ("town_kana");
 -- More indexes could be added if needed.
+
+-- Experimental/do not use in production!
+CREATE TABLE IF NOT EXISTS "apikeys" (
+    "id" SERIAL primary key,
+    "key" UUID NOT NULL,
+    "secret" TEXT NOT NULL,
+    "email" TEXT NOT NULL
+);
+
+CREATE INDEX "api_key_secret_idx" ON "apikeys" ("key", "secret");

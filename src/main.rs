@@ -34,14 +34,20 @@ async fn main() {
     tracing::info!("{} version {}", SERVICE_NAME, SERVICE_VERSION);
 
     // TODO(dkg): try and get rid of the "get(...)" wrapper
+    // TODO(dkg): implement middleware that checks the API key (see postgres-setup.sql and seed-data.sql)
     let app = Router::new()
         .route("/", get(routes::index::get))
         .route("/healthcheck", get(routes::healthcheck::get))
+        .route("/postcodes", get(routes::postcodes::get_list))
         .route(
-            "/lookup",
-            get(|| async { Redirect::permanent("/lookup/zip") }),
+            "/postcodes/:postcode",
+            get(routes::postcodes::get_by_postcode),
         )
-        .route("/lookup/zip", get(routes::lookup::zip::get))
+        .route("/prefectures", get(routes::prefectures::get_list))
+        .route(
+            "/prefectures/:prefecture_code/cities",
+            get(routes::prefectures::cities::get),
+        )
         .layer(TraceLayer::new_for_http());
 
     // add a fallback service for handling routes to unknown paths
@@ -57,6 +63,17 @@ async fn main() {
         .expect("Could not parse listening interface and/or port");
 
     tracing::info!("Running on {}", &listening_uri);
+
+    // TODO(dkg): find a way to do this automagically
+    tracing::info!("---------------------------------------------");
+    tracing::info!("Available routes:");
+    tracing::info!("\t GET /healthcheck");
+    tracing::info!("\t GET /postcodes");
+    tracing::info!("\t GET /postcodes/:postcode");
+    tracing::info!("\t GET /prefectures");
+    tracing::info!("\t GET /prefectures/:prefecture_code/cities");
+    tracing::info!("---------------------------------------------");
+
     axum::Server::bind(&listening_uri)
         .serve(app.into_make_service())
         .await
