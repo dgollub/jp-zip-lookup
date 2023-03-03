@@ -1,22 +1,29 @@
-use axum::{response::Redirect, routing::get, Router};
+use std::sync::Arc;
+
+use axum::{routing::get, Router};
 use figlet_rs::FIGfont;
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 pub mod constants;
+pub mod database;
 pub mod responses;
 pub mod routes;
+pub mod state;
 
-use constants::*;
+use crate::constants::*;
+use crate::database::{init_database, DBOptions};
+use crate::state::AppState;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), sqlx::Error> {
     // NOTE(dkg): make sure we have some log output
     let log_level = std::env::var("RUST_LOG");
     if log_level.is_err() {
         std::env::set_var("RUST_LOG", "info");
     }
 
+    // TODO(dkg): filter out sqlx queries _or_ rather make that logging optional via special env var
     tracing_subscriber::registry()
         .with(
             tracing_subscriber::EnvFilter::try_from_default_env()
@@ -72,10 +79,28 @@ async fn main() {
     tracing::info!("\t GET /postcodes/:postcode");
     tracing::info!("\t GET /prefectures");
     tracing::info!("\t GET /prefectures/:prefecture_code/cities");
+
+    let options = DBOptions::new_from_env();
+
     tracing::info!("---------------------------------------------");
+    tracing::info!(
+        "Using database at {}:{}/{}",
+        &options.host,
+        &options.port,
+        &options.name
+    );
+    tracing::info!("---------------------------------------------");
+
+    let db = init_database(options).await?;
+    let app_state = AppState { db };
+    let shared_state = Arc::new(app_state);
+
+    let app = app.with_state(shared_state);
 
     axum::Server::bind(&listening_uri)
         .serve(app.into_make_service())
         .await
         .expect("Service failed to start");
+
+    Ok(())
 }

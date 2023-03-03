@@ -8,7 +8,9 @@ The dataset used is the official [住所の郵便番号（CSV形式）](https://
 The service uses the [読み仮名データの促音・拗音を小書きで表記するもの](https://www.post.japanpost.jp/zipcode/dl/kogaki-zip.html) version of the data.
 
 
-*TODO* Tools to download and import data are provided in this repository. _TODO_: how to use examples
+*TODO* 
+- Tools to download and import data are provided in this repository. - how to use examples
+- replace sqlx with ormx or SeaORM
 
 # Build Instructions
 
