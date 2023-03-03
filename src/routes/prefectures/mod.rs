@@ -3,7 +3,7 @@ use std::sync::Arc;
 use axum::{extract::State, http::StatusCode, Json};
 use kana::half2kana;
 use serde::{Deserialize, Serialize};
-use wana_kana::to_hiragana::to_hiragana;
+use wana_kana::ConvertJapanese;
 
 use crate::state::AppState;
 
@@ -21,14 +21,12 @@ pub struct Prefecture {
     pub hiragana: Option<String>,
     #[serde(rename(serialize = "pref"))]
     pub kanji: String,
+    pub romaji: Option<String>,
 }
 
 pub async fn get_list(
     State(state): State<Arc<AppState>>,
 ) -> Result<Json<Vec<Prefecture>>, StatusCode> {
-    let db = &state.db;
-
-    // TODO(dkg): add hiragana and fullwidth katakana
     let rows = sqlx::query_as!(
         Prefecture,
         "SELECT DISTINCT
@@ -36,11 +34,12 @@ pub async fn get_list(
             prefecture_kana AS half_width_kana,
             prefecture_kanji AS kanji,
             null AS full_width_kana,
-            null AS hiragana
+            null AS hiragana,
+            null AS romaji
             FROM addresses
             ORDER BY substring(gov_code, 1, 2)",
     )
-    .fetch_all(db)
+    .fetch_all(&state.db)
     .await
     .map_err(|err| {
         eprintln!("Error executing query: {}", err);
@@ -51,7 +50,8 @@ pub async fn get_list(
         .into_iter()
         .map(|mut row| {
             let full_width_kana = half2kana(&row.half_width_kana);
-            row.hiragana = Some(to_hiragana(&full_width_kana));
+            row.hiragana = Some(full_width_kana.to_hiragana());
+            row.romaji = Some(full_width_kana.to_romaji());
             row.full_width_kana = Some(full_width_kana);
             row
         })
