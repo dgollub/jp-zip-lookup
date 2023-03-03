@@ -1,6 +1,6 @@
 {
   "db": "PostgreSQL",
-  "54c105a4dc7ae7e754f6edf4bb9cad04c0c00432a1883c86f19c1cac0c7a7b55": {
+  "0c7f945c5e584e3f2dd7048d62de3996e4574ea46f1a8fd6bcac493d15b7b66e": {
     "describe": {
       "columns": [
         {
@@ -17,17 +17,29 @@
           "name": "kanji",
           "ordinal": 2,
           "type_info": "Varchar"
+        },
+        {
+          "name": "full_width_kana",
+          "ordinal": 3,
+          "type_info": "Text"
+        },
+        {
+          "name": "hiragana",
+          "ordinal": 4,
+          "type_info": "Text"
         }
       ],
       "nullable": [
         null,
         false,
-        false
+        false,
+        null,
+        null
       ],
       "parameters": {
         "Left": []
       }
     },
-    "query": "SELECT DISTINCT\n            substring(gov_code, 1, 2) AS code,\n            prefecture_kana AS half_width_kana,\n            prefecture_kanji AS kanji\n            FROM addresses\n            ORDER BY substring(gov_code, 1, 2)"
+    "query": "SELECT DISTINCT\n            substring(gov_code, 1, 2) AS code,\n            prefecture_kana AS half_width_kana,\n            prefecture_kanji AS kanji,\n            null AS full_width_kana,\n            null AS hiragana\n            FROM addresses\n            ORDER BY substring(gov_code, 1, 2)"
   }
 }

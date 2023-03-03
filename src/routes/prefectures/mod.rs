@@ -1,7 +1,9 @@
 use std::sync::Arc;
 
 use axum::{extract::State, http::StatusCode, Json};
+use kana::half2kana;
 use serde::{Deserialize, Serialize};
+use wana_kana::to_hiragana::to_hiragana;
 
 use crate::state::AppState;
 
@@ -14,6 +16,9 @@ pub struct Prefecture {
     pub code: Option<String>,
     #[serde(rename(serialize = "halfWidthKana"))]
     pub half_width_kana: String,
+    #[serde(rename(serialize = "fullWidthKana"))]
+    pub full_width_kana: Option<String>,
+    pub hiragana: Option<String>,
     #[serde(rename(serialize = "pref"))]
     pub kanji: String,
 }
@@ -29,7 +34,9 @@ pub async fn get_list(
         "SELECT DISTINCT
             substring(gov_code, 1, 2) AS code,
             prefecture_kana AS half_width_kana,
-            prefecture_kanji AS kanji
+            prefecture_kanji AS kanji,
+            null AS full_width_kana,
+            null AS hiragana
             FROM addresses
             ORDER BY substring(gov_code, 1, 2)",
     )
@@ -39,6 +46,16 @@ pub async fn get_list(
         eprintln!("Error executing query: {}", err);
         StatusCode::INTERNAL_SERVER_ERROR
     })?;
+
+    let rows = rows
+        .into_iter()
+        .map(|mut row| {
+            let full_width_kana = half2kana(&row.half_width_kana);
+            row.hiragana = Some(to_hiragana(&full_width_kana));
+            row.full_width_kana = Some(full_width_kana);
+            row
+        })
+        .collect();
 
     Ok(Json(rows))
 }
