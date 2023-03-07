@@ -49,6 +49,9 @@ pub async fn get_list(
     let rows = rows
         .into_iter()
         .map(|mut row| {
+            // TODO(dkg): I think it would make more sense to write a proper import script
+            //            that sets those full kana, romaji and hiragana fields when the data
+            //            is initially imported, instead of doing this manually for each request.
             let full_width_kana = half2kana(&row.half_width_kana);
             row.hiragana = Some(full_width_kana.to_hiragana());
             row.romaji = Some(full_width_kana.to_romaji());

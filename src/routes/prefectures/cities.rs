@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{cmp, sync::Arc};
 
 use axum::{
     extract::{Path, State},
@@ -31,6 +31,8 @@ pub async fn get(
     Path(prefecture_code): Path<String>,
     State(state): State<Arc<AppState>>,
 ) -> Result<Json<Vec<City>>, StatusCode> {
+    // clamp the substring to a value between [2, 5]
+    let len: i32 = cmp::max(2, cmp::min(5, prefecture_code.len() as i32));
     let rows = sqlx::query_as!(
         City,
         "SELECT DISTINCT
@@ -42,9 +44,10 @@ pub async fn get(
             null AS hiragana,
             null AS romaji
             FROM addresses
-            WHERE substring(gov_code, 1, 2) = $1
+            WHERE substring(gov_code, 1, $1) = $2
             ORDER BY gov_code",
-        &prefecture_code
+        len,
+        &prefecture_code,
     )
     .fetch_all(&state.db)
     .await
@@ -56,6 +59,9 @@ pub async fn get(
     let rows = rows
         .into_iter()
         .map(|mut row| {
+            // TODO(dkg): I think it would make more sense to write a proper import script
+            //            that sets those full kana, romaji and hiragana fields when the data
+            //            is initially imported, instead of doing this manually for each request.
             let full_width_kana = half2kana(&row.half_width_kana);
             row.hiragana = Some(full_width_kana.to_hiragana());
             row.romaji = Some(full_width_kana.to_romaji());

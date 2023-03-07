@@ -1,6 +1,54 @@
 {
   "db": "PostgreSQL",
-  "057210a101c96d8c37674c39dd7e2509d7ebf0470ddc9efb7858ca75b93ef6c3": {
+  "75aea92f394d4bb6e6d287b92df6973f90ef5f011f1f3beb1e29f161ea29892f": {
+    "describe": {
+      "columns": [
+        {
+          "name": "code",
+          "ordinal": 0,
+          "type_info": "Text"
+        },
+        {
+          "name": "half_width_kana",
+          "ordinal": 1,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "kanji",
+          "ordinal": 2,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "full_width_kana",
+          "ordinal": 3,
+          "type_info": "Text"
+        },
+        {
+          "name": "hiragana",
+          "ordinal": 4,
+          "type_info": "Text"
+        },
+        {
+          "name": "romaji",
+          "ordinal": 5,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        null,
+        false,
+        false,
+        null,
+        null,
+        null
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "SELECT DISTINCT\n            substring(gov_code, 1, 2) AS code,\n            prefecture_kana AS half_width_kana,\n            prefecture_kanji AS kanji,\n            null AS full_width_kana,\n            null AS hiragana,\n            null AS romaji\n            FROM addresses\n            ORDER BY substring(gov_code, 1, 2)"
+  },
+  "993e63fe66d2ef292a773812622a328be36107d7eb18158ce0c1b5093d28071a": {
     "describe": {
       "columns": [
         {
@@ -50,58 +98,11 @@
       ],
       "parameters": {
         "Left": [
+          "Int4",
           "Text"
         ]
       }
     },
-    "query": "SELECT DISTINCT\n            gov_code,\n            zip_code,\n            town_kana AS half_width_kana,\n            town_kanji AS kanji,\n            null AS full_width_kana,\n            null AS hiragana,\n            null AS romaji\n            FROM addresses\n            WHERE substring(gov_code, 1, 2) = $1\n            ORDER BY gov_code"
-  },
-  "75aea92f394d4bb6e6d287b92df6973f90ef5f011f1f3beb1e29f161ea29892f": {
-    "describe": {
-      "columns": [
-        {
-          "name": "code",
-          "ordinal": 0,
-          "type_info": "Text"
-        },
-        {
-          "name": "half_width_kana",
-          "ordinal": 1,
-          "type_info": "Varchar"
-        },
-        {
-          "name": "kanji",
-          "ordinal": 2,
-          "type_info": "Varchar"
-        },
-        {
-          "name": "full_width_kana",
-          "ordinal": 3,
-          "type_info": "Text"
-        },
-        {
-          "name": "hiragana",
-          "ordinal": 4,
-          "type_info": "Text"
-        },
-        {
-          "name": "romaji",
-          "ordinal": 5,
-          "type_info": "Text"
-        }
-      ],
-      "nullable": [
-        null,
-        false,
-        false,
-        null,
-        null,
-        null
-      ],
-      "parameters": {
-        "Left": []
-      }
-    },
-    "query": "SELECT DISTINCT\n            substring(gov_code, 1, 2) AS code,\n            prefecture_kana AS half_width_kana,\n            prefecture_kanji AS kanji,\n            null AS full_width_kana,\n            null AS hiragana,\n            null AS romaji\n            FROM addresses\n            ORDER BY substring(gov_code, 1, 2)"
+    "query": "SELECT DISTINCT\n            gov_code,\n            zip_code,\n            town_kana AS half_width_kana,\n            town_kanji AS kanji,\n            null AS full_width_kana,\n            null AS hiragana,\n            null AS romaji\n            FROM addresses\n            WHERE substring(gov_code, 1, $1) = $2\n            ORDER BY gov_code"
   }
 }
