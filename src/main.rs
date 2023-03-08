@@ -48,7 +48,7 @@ async fn main() -> Result<(), sqlx::Error> {
         .route("/postcodes", get(routes::postcodes::get_list))
         .route(
             "/postcodes/:postcode",
-            get(routes::postcodes::get_by_postcode),
+            get(routes::postcodes::get_addresses_by_postcode),
         )
         .route("/prefectures", get(routes::prefectures::get_list))
         .route(

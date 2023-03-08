@@ -48,6 +48,87 @@
     },
     "query": "SELECT DISTINCT\n            substring(gov_code, 1, 2) AS code,\n            prefecture_kana AS half_width_kana,\n            prefecture_kanji AS kanji,\n            null AS full_width_kana,\n            null AS hiragana,\n            null AS romaji\n            FROM addresses\n            ORDER BY substring(gov_code, 1, 2)"
   },
+  "75f4eb2dd7b9baea5cb16805b97c8736d46d0e3e0c22f3c227eb38466b1a2233": {
+    "describe": {
+      "columns": [
+        {
+          "name": "zip_code",
+          "ordinal": 0,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "muncipalities_kanji",
+          "ordinal": 1,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "muncipalities_kana",
+          "ordinal": 2,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "muncipalities_kana_full",
+          "ordinal": 3,
+          "type_info": "Text"
+        },
+        {
+          "name": "muncipalities_hiragana",
+          "ordinal": 4,
+          "type_info": "Text"
+        },
+        {
+          "name": "muncipalities_romaji",
+          "ordinal": 5,
+          "type_info": "Text"
+        },
+        {
+          "name": "town_kanji",
+          "ordinal": 6,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "town_kana",
+          "ordinal": 7,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "town_kana_full",
+          "ordinal": 8,
+          "type_info": "Text"
+        },
+        {
+          "name": "town_hiragana",
+          "ordinal": 9,
+          "type_info": "Text"
+        },
+        {
+          "name": "town_romaji",
+          "ordinal": 10,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        null,
+        null,
+        null,
+        false,
+        false,
+        null,
+        null,
+        null
+      ],
+      "parameters": {
+        "Left": [
+          "Int4",
+          "Text"
+        ]
+      }
+    },
+    "query": "SELECT\n        zip_code,\n        muncipalities_kanji,\n        muncipalities_kana,\n        null AS muncipalities_kana_full,\n        null AS muncipalities_hiragana,\n        null AS muncipalities_romaji,\n        town_kanji,\n        town_kana,\n        null AS town_kana_full,\n        null AS town_hiragana,\n        null AS town_romaji\n    FROM addresses\n    WHERE substring(zip_code, 1, $1) = $2\n    ORDER BY zip_code"
+  },
   "993e63fe66d2ef292a773812622a328be36107d7eb18158ce0c1b5093d28071a": {
     "describe": {
       "columns": [
@@ -104,5 +185,23 @@
       }
     },
     "query": "SELECT DISTINCT\n            gov_code,\n            zip_code,\n            town_kana AS half_width_kana,\n            town_kanji AS kanji,\n            null AS full_width_kana,\n            null AS hiragana,\n            null AS romaji\n            FROM addresses\n            WHERE substring(gov_code, 1, $1) = $2\n            ORDER BY gov_code"
+  },
+  "c9d1765188e2ff73ea19d4b08570a400613efa3bf299774540fe49fe171e12b0": {
+    "describe": {
+      "columns": [
+        {
+          "name": "zip_code",
+          "ordinal": 0,
+          "type_info": "Varchar"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "SELECT DISTINCT zip_code FROM addresses ORDER BY zip_code"
   }
 }
