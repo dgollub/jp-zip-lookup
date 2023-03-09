@@ -3,4 +3,3 @@
 FROM postgres:14-bullseye
 
 COPY ./postgres-setup.sql /docker-entrypoint-initdb.d/
-COPY ./seed-data.sql /docker-entrypoint-initdb.d/
