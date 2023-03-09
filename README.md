@@ -38,7 +38,7 @@ _TBD_
 
 # Copyright
 
-Copyright (c) 2022 by Daniel Kurashige-Gollub <daniel@kurashige-gollub.de>
+Copyright (c) 2022, 2023 by Daniel Kurashige-Gollub <daniel@kurashige-gollub.de>
 
 
 # License
