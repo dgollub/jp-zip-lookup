@@ -24,6 +24,28 @@ Run `cargo build --release` to build a release build of the service.
 
 Run `cargo run` to run a debug build of the service.
 
+Then try one of the following curl examples:
+
+```bash
+# general healthcheck endpoint
+curl http://localhost:8900/healthcheck
+
+# get a list of postcodes
+curl http://localhost:8900/postcodes
+
+# get a list of cities in "postcode" (e.g. 3430114)
+# you can use incomplete postcodes, e.g. only the first 3 digits
+curl http://localhost:8900/postcodes/:postcode
+
+# get a list of prefectures
+curl http://localhost:8900/prefectures
+
+# get a list of cities for a prefecture by providing the prefecture code
+curl http://localhost:8900/prefectures/:prefecture_code/cities
+# example for Okinawa
+curl http://localhost:8900/prefectures/47/cities
+```
+
 ## Database
 
 The database must be up and running for the service to work. 
