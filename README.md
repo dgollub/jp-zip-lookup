@@ -16,7 +16,7 @@ You will need the following software/tools installed on your system
 
 - [Rust](https://www.rust-lang.org/)
 - [Docker](https://www.docker.com/) (optional)
-- [PostgreSQL](https://www.postgresql.org/)
+- [PostgreSQL](https://www.postgresql.org/) (not needed if you have Docker and use the provided [docker-compose file](docker/compose.yml))
 
 ## Building and running
 
