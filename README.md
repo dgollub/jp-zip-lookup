@@ -10,6 +10,14 @@ The service uses the [読み仮名データの促音・拗音を小書きで表�
 
 # Build Instructions
 
+<div align="center">
+  <!-- Github Actions -->
+  <a href="https://github.com/dgollub/jp-zip-lookup/actions/workflows/rust.yml?query=branch%3Amain">
+    <img src="https://img.shields.io/github/actions/workflow/status/dgollub/jp-zip-lookup/rust.yml?branch=main&style=flat-square"
+      alt="github actions status" />
+  </a>
+</div>
+
 ## Requirements
 
 You will need the following software/tools installed on your system
