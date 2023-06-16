@@ -15,7 +15,7 @@ The service uses the [読み仮名データの促音・拗音を小書きで表�
 You will need the following software/tools installed on your system
 
 - [Rust](https://www.rust-lang.org/)
-- [Docker](https://www.docker.com/) (optional)
+- [Docker](https://www.docker.com/) (optional, provides the [PostgreSQL database](docker/))
 - [PostgreSQL](https://www.postgresql.org/) (not needed if you have Docker and use the provided [docker-compose file](docker/compose.yml))
 
 ## Building and running
