@@ -16,3 +16,7 @@ pub const DEFAULT_DB_PORT: u16 = 5432;
 pub const DEFAULT_DB_NAME: &str = "jpzip";
 pub const DEFAULT_DB_USER: &str = "jpzip";
 pub const DEFAULT_DB_PASSWORD: &str = "jpzip";
+
+pub const ZIP_NAME: &str = "ken_all.zip";
+pub const UNZIPPED_NAME: &str = "KEN_ALL.CSV";
+pub const DOWNLOAD_URL: &str = "https://www.post.japanpost.jp/zipcode/dl/kogaki/zip/ken_all.zip";

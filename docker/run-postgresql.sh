@@ -10,6 +10,14 @@ DOCKER_COMPOSE_FILE="${SCRIPTPATH}/compose.yml"
 GROUP=${GROUP}
 SUDO=
 
+[ -f ".env" ] && . ".env"
+
+DB_USER=${JPZIP_DB_USER:=jpzip}
+DB_PASSWORD=${JPZIP_DB_PASSWORD:=jpzip}
+DB_NAME=${JPZIP_DB_NAME:=jpzip}
+DB_PORT=${JPZIP_DB_PORT:=5432}
+DB_HOST=${JPZIP_DB_HOST:=localhost}
+
 [ -z $GROUP ] && GROUP=`groups $(whoami) | cut -d' ' -f1`
 [ -z $GROUP ] && GROUP=`id -g`
 [ "$OSTYPE" != "darwin"* ] || SUDO="sudo"
@@ -32,6 +40,14 @@ abort() {
   exit 1;
 }
 
+export PGPASSWORD="${DB_PASSWORD}"
+
+TEST=`psql -h "${DB_HOST}" -U "${DB_USER}" -p "${DB_PORT}" -d "postgres" -c 'SELECT NOW();'`
+if [ ! -z "${TEST}" ]; then
+  echo "PostgreSQL database service already up and running."
+  exit 0;
+fi
+
 echofig "Building and starting PostgreSQL Docker container"
 
 mkdir -p "${PG_DATA_DIR}"
@@ -44,7 +60,12 @@ docker-compose -f "${DOCKER_COMPOSE_FILE}" up -d --build || abort "Failed to bui
 echo "Done: Docker PostgreSQL container will be up and running shortly. It usually takes a couple of seconds."
 echo "Waiting for container to start up ..."
 echo ""
-sleep 30 > /dev/null
+
+until psql -h "${DB_HOST}" -U "${DB_USER}" -p "${DB_PORT}" -d "postgres" -c '\q'; do
+    echo "Postgres is still unavailable - sleeping ... press CTRL-C to stop this script"
+    sleep 1
+done
+
 echo "Use 'docker logs -f postgres14-jpzip' to see the logs of the database."
 echo "Use 'PGPASSWORD=jpzip psql --host=localhost --port 5432 --user=jpzip' to connect to the database."
 echo ""

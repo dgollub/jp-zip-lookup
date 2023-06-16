@@ -2,18 +2,20 @@
 
 This folder is reserved for the data files to import into the service's database.
 
-*TODO* The data files can be obtained from the official [Japan Post website](https://www.post.japanpost.jp/zipcode/dl/kogaki-zip.html)
-or via the provided utility tools. (TODO)
+The data files can be obtained from the official [Japan Post website](https://www.post.japanpost.jp/zipcode/dl/kogaki-zip.html)
+or via the provided [utility script](download-and-import.sh).
 
-The data files then need to be imported into the database. The service will try this automatically on startup _if_ no data is currently available in the database.
+The data files need to be imported into the database. The service will try this automatically on startup _if_ no data is currently available in the database. This only happens once.
+
+*Notice*: In order for this to work the database will need to be
+up and running and also have the correct schema and tables in
+place already!
+
+Set the environment variable `JSZIP_DISABLE_AUTO_INIT_DB` to `1` in order to **disable** automatic database initialization with data. 
 
 If data was already imported before the data files are ignored on service startup.
 
 If you want to re-import the data please use the provided utility tools.
-
-*TODO* usage/howto examples
-
-maybe the service can be started with a "force reimport" flag?
 
 
 # CSV Columns

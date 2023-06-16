@@ -22,7 +22,7 @@ pub async fn get_list(State(state): State<Arc<AppState>>) -> Result<Json<Vec<Str
             StatusCode::INTERNAL_SERVER_ERROR
         })?;
 
-    Ok(Json(rows.into_iter().map(|r| r.zip_code.into()).collect()))
+    Ok(Json(rows.into_iter().map(|r| r.zip_code).collect()))
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]
