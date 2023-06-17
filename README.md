@@ -36,22 +36,77 @@ Then try one of the following curl examples:
 
 ```bash
 # general healthcheck endpoint
-curl http://localhost:8900/healthcheck
+curl -s http://localhost:8900/healthcheck | jq
+{
+  "message": "ok"
+}
 
 # get a list of postcodes
-curl http://localhost:8900/postcodes
+curl -s http://localhost:8900/postcodes | jq
+[
+  "0010000",
+  "0010010",
+  "0010011",
+  "0010012",
+  "0010013",
+  "0010014",
+  "0010015",
+  ...
+]
 
-# get a list of cities in "postcode" (e.g. 3430114)
+# get a list of cities in "postcode" (e.g. 1130034)
 # you can use incomplete postcodes, e.g. only the first 3 digits
-curl http://localhost:8900/postcodes/:postcode
+curl -s http://localhost:8900/postcodes/:postcode | jq
+
+# example for 113-0034
+curl -s http://localhost:8900/postcodes/1130034 | jq
+[
+  {
+    "zipCode": "1130034",
+    "muncipalitiesKanji": "文京区",
+    "muncipalitiesKana": "ﾌﾞﾝｷｮｳｸ",
+    "muncipalitiesKanaFull": "ブンキョウク",
+    "muncipalitiesHiragana": "ぶんきょうく",
+    "muncipalitiesRomaji": "bunkyouku",
+    "townKanji": "湯島",
+    "townKana": "ﾕｼﾏ",
+    "townKanaFull": "ユシマ",
+    "townHiragana": "ゆしま",
+    "townRomaji": "yushima"
+  },
+  ...
+]
 
 # get a list of prefectures
-curl http://localhost:8900/prefectures
+curl -s http://localhost:8900/prefectures | jq
+[
+  {
+    "prefCode": "01",
+    "halfWidthKana": "ﾎｯｶｲﾄﾞｳ",
+    "fullWidthKana": "ホッカイドウ",
+    "hiragana": "ほっかいどう",
+    "pref": "北海道",
+    "romaji": "hokkaidou"
+  },
+  ...
+]
 
 # get a list of cities for a prefecture by providing the prefecture code
-curl http://localhost:8900/prefectures/:prefecture_code/cities
-# example for Okinawa
-curl http://localhost:8900/prefectures/47/cities
+curl -s http://localhost:8900/prefectures/:prefecture_code/cities | jq
+# example for Hokkaido
+curl -s http://localhost:8900/prefectures/01/cities | jq
+[
+  {
+    "govCode": "01101",
+    "zipCode": "0600001",
+    "halfWidthKana": "ｷﾀ1ｼﾞｮｳﾆｼ(1-19ﾁｮｳﾒ)",
+    "fullWidthKana": "キタ1ジョウニシ(1-19チョウメ)",
+    "hiragana": "きた1じょうにし（1ー19ちょうめ）",
+    "city": "北一条西（１～１９丁目）",
+    "romaji": "kita1jounishi(1-19choume)"
+  },
+  ...
+]
 ```
 
 ## Database

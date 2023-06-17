@@ -6,11 +6,9 @@
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 PG_DATA_DIR="${SCRIPTPATH}/pgdata"
-DOCKER_COMPOSE_FILE="${SCRIPTPATH}/compose.yml"
+DOCKER_COMPOSE_FILE="${SCRIPTPATH}/docker-compose.yml"
 GROUP=${GROUP}
 SUDO=
-
-[ -f ".env" ] && . ".env"
 
 DB_USER=${JPZIP_DB_USER:=jpzip}
 DB_PASSWORD=${JPZIP_DB_PASSWORD:=jpzip}
@@ -26,7 +24,7 @@ cleanup() {
     err=$?
     exit $err
 }
-trap cleanup INT ERR TERM
+trap cleanup INT TERM
 
 echofig() {
   WIDTH=`tput cols`; [ $? -eq 0 ] || WIDTH=120
@@ -61,7 +59,7 @@ echo "Done: Docker PostgreSQL container will be up and running shortly. It usual
 echo "Waiting for container to start up ..."
 echo ""
 
-until psql -h "${DB_HOST}" -U "${DB_USER}" -p "${DB_PORT}" -d "postgres" -c '\q'; do
+until psql -h "${DB_HOST}" -U "${DB_USER}" -p "${DB_PORT}" -d "postgres" -c '\q' > /dev/null 2>&1; do
     echo "Postgres is still unavailable - sleeping ... press CTRL-C to stop this script"
     sleep 1
 done
